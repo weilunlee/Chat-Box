@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="ChatBox_web.css">
+</head>
+<body>
+<!-- <body onload="focus_inp();"> -->
+        <div class="login_container">    
+        <div id="login">
+            <div class="header">User Login</div>
+            <div class="login_elm">
+                <label for="userID" id="label">ID:</label>
+                <input type="text" name="userID" id="userID" class="login_input">
+            </div>
+            <div class="login_line"></div>
+            <button  onclick="start()" class="login_elm login_btn" id="login_btn">Start</button>
+            <!-- <button class="login_elm login_btn" id="login_btn">Start</button> -->
+        </div>
+    </div>
+    <div id="input_show"></div>
+    <div id="output"></div>
+
+
+    <div class="start_btn" id="start_btn"  onclick="start()"></div>
+    <div class="chat_Box_contianer" id="container">
+        <div class="title_block" id="title">&nbsp&nbsp&nbspROBOT</div>
+        <!-- <div class="outer_interaction_block" id="outer_inter_blk"> -->
+            <div class="interaction_block" id="interaction"></div>
+        <!-- </div> -->
+        <div class="type_span" id="type">
+            <input class="input_block" id="inp_txt" name="inp_txt" type="text" autocomplete="off">
+            <button class="inpt_btn" type="submit" name="tri" id="tri">
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHhtbG5zOnN2Z2pzPSJodHRwOi8vc3ZnanMuY29tL3N2Z2pzIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgeD0iMCIgeT0iMCIgdmlld0JveD0iMCAwIDU1Mi42MTEgNTUyLjYxMSIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNTEyIDUxMiIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PGc+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+Cgk8Zz4KCQk8cGF0aCBkPSJNNDg2LjQxMywyMjEuNDEyTDEyMi4zNDcsMTIuOTE2Yy01Mi45MzgtMzAuMzE4LTk1Ljg1Mi01LjQ0LTk1Ljg1Miw1NS41NjN2NDE1LjY1MmMwLDYxLjAwNCw0Mi45MTQsODUuODgyLDk1Ljg1Miw1NS41NjMgICAgbDM2NC4wNjYtMjA4LjQ5QzUzOS4zNTEsMzAwLjg4Nyw1MzkuMzUxLDI1MS43MzEsNDg2LjQxMywyMjEuNDEyeiIgZmlsbD0iIzczOTBmMiIgZGF0YS1vcmlnaW5hbD0iIzAwMDAwMCIgc3R5bGU9IiI+PC9wYXRoPgoJPC9nPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjwvZz48L3N2Zz4=" />
+            </button>
+            <input type="hidden" name="code" value="">
+        </div>
+    </div>
+    <script src="web_frame.js"></script>
+    <script src="web_Show_historical_data.js"></script>
+   
+
+
+
+    <script src="web_ndjs.js"></script>
+</body>
+</html>
