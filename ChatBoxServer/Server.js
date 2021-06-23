@@ -3,7 +3,7 @@
 
 const WebSocket=require('ws');                              //取得ws
 const fs=require('fs');                                  //取得fs(放在物件裡面)
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
 const wss=new WebSocket.Server({ port:3000, });             //其實裡面應該是JSON個格式的物件
 wss.on('listening', ()=>{ console.log('listening on PORT: 3000') });   //讓server持續監聽 port 3000
 
@@ -34,11 +34,9 @@ class createBot {
     string_identifer="/%split_here%/";
     cleaned_Msg="";
     constructor(e_str) {
-        console.log("e_str"+e_str);
         var _JSON=JSON.parse(e_str);
-        console.log(_JSON);
         this.id = _JSON.id;
-        this.msg = "";
+        this.msg = _JSON.msg;
         this.prefix = _JSON.prefix;
         this.emot = _JSON.emot;
         this.historyData = historyDataArr;
@@ -50,36 +48,34 @@ class createBot {
         var temp="";
         this.openNewFile(this.fileName);
         temp=this.readingFile(this.fileName).toString("utf-8");
-        // console.log(temp);
         historyDataArr=this.StrtoArray(temp)    
         this.historyData=historyDataArr;
         return historyDataArr;
     }
 
-    checkFileExist() {
 
-    }
 
-    inputMsg(msg){                                    //輸入對話
-        this.savingMsgToFile(this.fileName, msg);     //輸入存檔
-        this.msg=msg;                                 //原始輸入
-        this.cleaned_Msg=this.inputTextCleaning(msg); //清理後輸入       
+    inputMsg(strMsg){                                    //輸入對話
+        this.savingMsgToFile(this.fileName, strMsg);     //輸入存檔
+        this.msg=this.msg;                                 //原始輸入
+        this.cleaned_Msg=this.inputTextCleaning(this.msg); //清理後輸入       
     }
 
     replyProcessing(){                                      //生成回應+存入JSON
-        bot.id=this.id;
+        bot.id="bot";
         bot.msg=this.msg;
         bot.prefix=this.prefix;
         bot.emot=this.emot;
         bot.historyData=this.historyData;
         bot.fileName=this.fileName;
+        console.log("處理完的回應 bot object: ")
+        console.log(bot)
         if(bot.prefix=="login"){
             return this.historyData.join(this.string_identifer);
 
         }else if(bot.prefix=="msg"){
             var s=new Array();
             s[0]=JSON.stringify(bot);
-            console.log("bot prefix = msg :"+s);
             return s.join(this.string_identifer);
         }
     }
@@ -94,7 +90,7 @@ class createBot {
         });      
     }
     readingFile(fileName){                                  //讀舊檔
-        console.log("read successful");
+        console.log(fileName);
         return (fs.readFileSync(fileName))        
     }
 
@@ -108,12 +104,12 @@ class createBot {
     
     
     savingMsgToFile(fileName, msg){
-        this.tempSavingData+=msg+this.string_identifer;
-
+        this.tempSavingData+=(msg+this.string_identifer);
         fs.appendFile(fileName, this.tempSavingData, (err)=>{
             if(err) throw "append file wrong & err="+err;
             this.tempSavingData="";
         });
+        this.tempSavingData="";
     }
 
 
@@ -121,7 +117,7 @@ class createBot {
 
     // 處理輸入用
     inputTextCleaning(msg){
-        // console.log(msg);
+        console.log("to lower case wrong 之 string(should be message content)" + msg)
         var lower_case_str=msg.toLowerCase();    //  變小寫
         // 去標點符號
         var arr_punc=['。','！','!', '"', '#', '$', '%', '&', '\'', '(', ')', '*',
@@ -141,6 +137,7 @@ class createBot {
         // 去語助詞
         let str2="["+arr_aha.join('')+"]";
         lower_case_str=lower_case_str.replace(new RegExp(str2,'g'),'');
+        console.log("自動去字" + lower_case_str)
         return lower_case_str;
     }
 
@@ -170,41 +167,41 @@ class createBot {
         var user_greeting_hap=["HI~~","哈囉","你好啊","嗨~你好啊~(´･ω･`)"];
         var user_greeting_nor=["嗨","是你啊","...嗯","來了就來了"];
         var user_greeting_ang=["你還來啊","還敢來?","膽子不小阿"];
-    
+
         if(bot_emotion=="happy"){
-            if(this.msg==0){
+            if(this.cleaned_Msg==0){
                 this.msg=user_greeting_hap[Math.round(Math.random()*(user_greeting_hap.length-1))];            
             }
-            if(this.msg==1){
+            if(this.cleaned_Msg==1){
                 this.msg=reply_for_nothing_hap[Math.round(Math.random()*(reply_for_nothing_hap.length-1))];            
             }
         }else if(bot_emotion=="normal"){
-            if(this.msg==0){
+            if(this.cleaned_Msg==0){
                 this.msg=user_greeting_nor[Math.round(Math.random()*(user_greeting_nor.length-1))];            
                 return;
             }
-            if(this.msg==1){
+            if(this.cleaned_Msg==1){
                 this.msg=reply_for_nothing_nor[Math.round(Math.random()*(reply_for_nothing_nor.length-1))];            
                 return;
             }
         }else if(bot_emotion=="angry"){
-            if(this.msg==0){
+            if(this.cleaned_Msg==0){
                 this.msg=user_greeting_ang[Math.round(Math.random()*(user_greeting_ang.length-1))];            
                 return;
             }
-            if(this.msg==1){
+            if(this.cleaned_Msg==1){
                 this.msg=reply_for_nothing_ang[Math.round(Math.random()*(reply_for_nothing_ang.length-1))];            
                 return;
             }
         }
-    
+
         var play_or_not="";
         var hi=["hi","hello","你好", "嗨","哈囉","哈摟","哈搂","Good morning","Morning", "Evening", "Good Evening", "你好阿", "早", "早安","你好挖","你好啊","你好哇"];
-        var reply_hi=["你好", "嗨","哈囉","早","早安"];
+        var reply_hi=["你好", "嗨","哈囉你好","早","早安"];
         var who_are_you=["你是誰","你誰","你是啥","誰","Who are you", "What are you","你是甚麼","你是什麼"];
         var reply_who_are_you=["...請別問廢話", "關你屁事", "干卿底事?", "我是你爸", "你不會想知道的", "我是好人，也是壞人", "( ಠ_ಠ )", " | •́ ▾ •̀ |", "٩(●˙▿˙●)۶…⋆ฺ", "(•ิ_•ิ)?"];
         var reply_for_win=["恭喜", "哼", "我明明快就要贏的!!!!","再來一次啦","我不玩了","我不玩了","我不玩了","阿不就好棒棒"];
-        console.log(this.msg);
+        // console.log("line 205: "+this.msg);
         play_or_not=this.msg.match(/要/);
         let win_or_not=this.msg.match(/我贏/)
         if(play_or_not=="要"){
@@ -213,32 +210,32 @@ class createBot {
     
         if(win_or_not=="我贏"){
             this.emot=this.emot-1;
-            console.log("emotion="+this.emot);
             for(let i=0;i<hi.length; i++){    
                 this.msg=reply_for_win[Math.round(Math.random()*(reply_for_win.length-1))];   
                 // return reply_for_win[Math.round(Math.random()*(reply_for_win.length-1))];            
             }        
         }    
-        for(let i=0;i<hi.length; i++){    
-            if(this.msg==hi[i]){
+        console.log("this msg :+++++++++++++++++++++++++++")
+        console.log(this.msg);
+    
+        for(let i=0;i<hi.length; i++){ 
+            if(this.cleaned_Msg==hi[i]){
                 this.msg=reply_hi[Math.round(Math.random()*(reply_hi.length-1))];     
-                // return reply_hi[Math.round(Math.random()*(reply_hi.length-1))];            
             }        
         }
         for(var i=0;i<who_are_you.length; i++){    
-            if(this.msg==who_are_you[i]){
+            if(this.cleaned_Msg==who_are_you[i]){
                 let num=Math.random()*(reply_who_are_you.length-1);
-                console.log(num);
+                console.log("line 83:"+num);
                 this.msg=reply_who_are_you[Math.round(num)];            
                 // return reply_who_are_you[Math.round(num)];            
             }        
         }
         for(var i=0;i<hi.length; i++){    
-            if(this.msg==hi[i]){
+            if(this.cleaned_Msg==hi[i]){
                 this.msg=reply_hi[Math.round(Math.random()*reply_hi.length)];
                 // return reply_hi[Math.round(Math.random()*reply_hi.length)];            
             }        
-            // this.savingMsgToFile(this.fileName, msg);     //回應存檔
         }
 
 
@@ -276,19 +273,20 @@ function onMessageInput(e){
         // open file
         // reply history data
         // reply greeting
-        console.log("login process");
         var temp_test_arr=botClass.historyFile();
-        console.log("history file read successful :"+temp_test_arr);
+        console.log("history file read successful :");
+        console.log(temp_test_arr);
         str_out=botClass.replyProcessing();
         return str_out;
     }else if(json_inp.prefix=="msg"){
         // open file
         // reply history data
         // reply greeting
-        console.log("message process");
-        botClass.inputMsg(json_inp.msg);
+        botClass.inputMsg(e);
         botClass.replySummary();
         str_out=botClass.replyProcessing();
+        botClass.inputMsg(str_out);
+        console.log("strOut :"+str_out)
         return str_out;
     
     }else if(json_inp.prefix=="other"){
@@ -313,8 +311,9 @@ wss.on('connection', ws=>{                                  //client 節點連�
     ws.on('message', e=>{                                 //收到訊息
         console.log("input here:"+e);
         let str=onMessageInput(e)
-        console.log("回應"+str);
+        console.log("回應 send :"+str)
         ws.send(str);
+        console.log("======= communication end ==================")
     });
     
     ws.on('close', e=>{
