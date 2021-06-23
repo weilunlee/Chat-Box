@@ -41,6 +41,7 @@ function sendMessage(e){
     console.log(user);
     str_sent=JSON.stringify(user);
     wsWeb.send(str_sent);
+    block_assign(user.id, user.msg)
 }
 
 //websocket 關閉連線!!!

@@ -17,20 +17,21 @@ function PrintOnScreem(msg){
     //         return inutile && inutile.trim() && (inutile!="undefined");
     //     })
 
-        // console.log(msg);
+        console.log(msg);
         for(var k=0; k<msg.length;k++){
             msg_json_arr[k]=JSON.parse(msg[k]);
             // console.log(msg_json_arr[k]);
         }
 
         // 處理prefix
+        console.log(msg_json_arr[0]);
         if(msg_json_arr[0].prefix=="login"){
             console.log("recevied login");
             // console.log(msg_json_arr);
             interaction.scrollTo(0, (his_msg_blk()-100));
             sending_blk_show();
         }else{
-            console.log("recevied message");
+            console.log("recevied message" + msg_json_arr[0]);
             interaction.scrollTo(0, his_msg_blk()-100);
             new_message_blk.remove();
             interaction.style.height="494px";
@@ -74,11 +75,10 @@ function msg_blk(msg){
         
         if(msg_json_arr[i].prefix=="msg"){
             if(temp_JSON.id=="bot"){
-                // console.log("b");
-                block_assign(temp_JSON.id, temp_JSON.message);
+                block_assign(temp_JSON.id, temp_JSON.msg);
             }else if(temp_JSON.id!="bot"){
-                // console.log("u");
-                block_assign(temp_JSON.id, temp_JSON.message);
+                console.log(temp_JSON.msg);
+                block_assign(temp_JSON.id, temp_JSON.msg);
             }
         }
 //設高度
@@ -97,9 +97,9 @@ function his_msg_blk(){
         // console.log(msg_json_arr[i]);
         if(msg_json_arr[i].prefix=="msg"){ 
             if(msg_json_arr[i].id=="bot"){
-                block_assign(msg_json_arr[i].id, msg_json_arr[i].message);
+                block_assign(msg_json_arr[i].id, msg_json_arr[i].msg);
             }else if(msg_json_arr[i].id!="bot"){
-                block_assign(msg_json_arr[i].id, msg_json_arr[i].message);
+                block_assign(msg_json_arr[i].id, msg_json_arr[i].msg);
             }
         }
 
